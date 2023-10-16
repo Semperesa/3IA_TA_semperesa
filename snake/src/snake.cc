@@ -9,6 +9,11 @@
 #include <esat/input.h>
 #include <esat/time.h>
 
+#include "grid.h"
+#include "agent.h"
+
+double current_time, last_time;
+const int fps = 5;
 const int kQuadSize = 32;
 const int kWindowWidth = 640;
 const int kWindowHeight = 480;
@@ -18,7 +23,7 @@ struct Quad {
 };
 
 struct Pos {
-  float x, y;
+  int x, y;
 };
 
 void DrawTiles() {
@@ -32,16 +37,18 @@ void DrawTiles() {
   }
 }
 
-Pos MoveSnake(Pos pos) {
-
-  pos.x += 32.0f;
-  
+Pos MoveSnake(Pos pos, Quad target) {
+  if (pos.x > target.x1) pos.x += kQuadSize;
+  if (pos.x < target.x1) pos.x -= kQuadSize;
+  if (pos.y > target.y1) pos.y += kQuadSize;
+  if (pos.y < target.y1) pos.y -= kQuadSize;
   return pos;
 }
 
 Quad GenerateRandomQuad() {
   int randx = (rand() % 20) * kQuadSize;
   int randy = (rand() % 15) * kQuadSize;
+  printf("%d, %d\n", randx, randy);
   Quad quad = { (float) randx, (float) (randx + kQuadSize), (float) randy, (float) (randy + kQuadSize)};
   return quad;
 }
@@ -59,7 +66,7 @@ void DrawQuad(Quad quad) {
   esat::DrawSolidPath(p, 5, true);
 }
 
-void Snake() {
+void Play() {
 
   srand(time(NULL));
 
@@ -73,11 +80,12 @@ void Snake() {
   Quad quad = GenerateRandomQuad();
 
   while (esat::WindowIsOpened() && !esat::IsSpecialKeyDown(esat::kSpecialKey_Escape)) {
+    last_time = esat::Time();
     esat::DrawBegin();
     esat::DrawClear(0, 0, 0);
     
     //Update
-    pos = MoveSnake(pos);
+    pos = MoveSnake(pos, quad);
 
     //Draw
     esat::DrawSprite(snake_sprite, pos.x, pos.y);
@@ -86,6 +94,10 @@ void Snake() {
 
     esat::DrawEnd();
 
+    //Control fps
+    do {
+      current_time = esat::Time();
+    } while ((current_time - last_time) <= 1000.0 / fps);
     // End of current frame
     esat::WindowFrame();
 
@@ -97,6 +109,6 @@ void Snake() {
 }
 
 int esat::main(int argc, char **argv) {
-  Snake();
+  Play();
   return 0;
 }
