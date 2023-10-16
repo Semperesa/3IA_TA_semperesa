@@ -5,14 +5,14 @@ Grid::Grid(unsigned int w, unsigned int h) {
   w_ = w;
   h_ = h;
   tiles_ = new Tile[w_ * h_];
-  for (int x = 0; x < w_; x++) {
-    for (int y = 0; y < h_; y++) {
+  for (unsigned int x = 0; x < w_; x++) {
+    for (unsigned int y = 0; y < h_; y++) {
       tiles_[x + y * w_].state = kEmpty;
     }
   }
 }
 
-Grid* Grid::CreatedGrid(unsigned int w, unsigned int h) {
+Grid* Grid::CreateGrid(unsigned int w, unsigned int h) {
   return new Grid(w, h);
 }
 
@@ -25,7 +25,7 @@ Tile Grid::getTile(unsigned int x, unsigned int y) {
   if (y > h_) {
     return t;
   }
-  return tiles_[x + y * w_]);
+  return tiles_[x + y * w_];
 }
 
 Error Grid::freeTile(unsigned int x, unsigned int y) {

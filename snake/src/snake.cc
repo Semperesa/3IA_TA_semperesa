@@ -1,3 +1,4 @@
+
 #include <cmath>
 #include <sstream>
 #include <iostream>
@@ -12,11 +13,12 @@
 #include "grid.h"
 #include "agent.h"
 
-double current_time, last_time;
 const int fps = 5;
 const int kQuadSize = 32;
 const int kWindowWidth = 640;
 const int kWindowHeight = 480;
+
+double current_time, last_time;
 
 struct Quad {
   int x1, y1, x2, y2;
@@ -75,16 +77,19 @@ void Play() {
 
   esat::SpriteHandle snake_sprite = esat::SpriteFromFile("../data/snake.png");
 
+
   Pos pos = { 0.0f, 0.0f };
 
   Quad quad = GenerateRandomQuad();
+
+  Grid* grid = Grid::CreateGrid(100, 100);
 
   while (esat::WindowIsOpened() && !esat::IsSpecialKeyDown(esat::kSpecialKey_Escape)) {
     last_time = esat::Time();
     esat::DrawBegin();
     esat::DrawClear(0, 0, 0);
     
-    //Update
+    //Update    
     pos = MoveSnake(pos, quad);
 
     //Draw
@@ -108,7 +113,7 @@ void Play() {
   esat::WindowDestroy();
 }
 
-int esat::main(int argc, char **argv) {
-  Play();
+int esat::main(int, char**) {
+  Play();  
   return 0;
 }

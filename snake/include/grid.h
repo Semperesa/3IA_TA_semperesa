@@ -1,6 +1,6 @@
 
 #ifndef __GRID_H__
-#define __GRID_H__
+#define __GRID_H__ 1
 
 enum TileState {
   kInvalid,
@@ -36,7 +36,6 @@ public:
   void getTarget(unsigned int& x, unsigned int& y);
 
 private:
-
   Grid(unsigned int w, unsigned int h);
 
   unsigned int w_;
@@ -44,7 +43,6 @@ private:
   unsigned int target_x_;
   unsigned int target_y_;
   Tile* tiles_;
-
 
 };
 
