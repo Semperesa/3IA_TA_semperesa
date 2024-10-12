@@ -31,11 +31,11 @@ struct Pos {
 void DrawTiles() {
   for (int x = kQuadSize; x < kWindowWidth; x += kQuadSize) {
     esat::DrawSetStrokeColor(255, 255, 255, 255);
-    esat::DrawLine(x, 0, x, kWindowHeight);
+    esat::DrawLine((float)x, 0, (float)x, kWindowHeight);
   }
   for (int y = kQuadSize; y < kWindowHeight; y += kQuadSize) {
     esat::DrawSetStrokeColor(255, 255, 255, 255);
-    esat::DrawLine(0, y, kWindowWidth, y);
+    esat::DrawLine(0, (float)y, kWindowWidth, (float)y);
   }
 }
 
@@ -51,17 +51,17 @@ Quad GenerateRandomQuad() {
   int randx = (rand() % 20) * kQuadSize;
   int randy = (rand() % 15) * kQuadSize;
   printf("%d, %d\n", randx, randy);
-  Quad quad = { (float) randx, (float) (randx + kQuadSize), (float) randy, (float) (randy + kQuadSize)};
+  Quad quad = { randx, (randx + kQuadSize), randy, (randy + kQuadSize)};
   return quad;
 }
 
 void DrawQuad(Quad quad) {    
   float p[] = {
-    quad.x1, quad.y1,
-    quad.x2, quad.y1,
-    quad.x2, quad.y2,
-    quad.x1, quad.y2,
-    quad.x1, quad.y2,
+    (float)quad.x1, (float)quad.y1,
+    (float)quad.x2, (float)quad.y1,
+    (float)quad.x2, (float)quad.y2,
+    (float)quad.x1, (float)quad.y2,
+    (float)quad.x1, (float)quad.y2,
   };
   esat::DrawSetFillColor(255, 0, 0, 255);
   esat::DrawSetStrokeColor(255,0, 0, 255);
@@ -69,8 +69,8 @@ void DrawQuad(Quad quad) {
 }
 
 void Play() {
-
-  srand(time(NULL));
+  
+  srand(time(0));
 
   esat::WindowInit(640, 480);
   esat::WindowSetMouseVisibility(true);
@@ -78,11 +78,11 @@ void Play() {
   esat::SpriteHandle snake_sprite = esat::SpriteFromFile("../data/snake.png");
 
 
-  Pos pos = { 0.0f, 0.0f };
+  Pos pos = { 0, 0 };
 
   Quad quad = GenerateRandomQuad();
 
-  Grid* grid = Grid::CreateGrid(100, 100);
+  //Grid* grid = Grid::CreateGrid(100, 100);
 
   while (esat::WindowIsOpened() && !esat::IsSpecialKeyDown(esat::kSpecialKey_Escape)) {
     last_time = esat::Time();
@@ -93,7 +93,7 @@ void Play() {
     pos = MoveSnake(pos, quad);
 
     //Draw
-    esat::DrawSprite(snake_sprite, pos.x, pos.y);
+    esat::DrawSprite(snake_sprite, (float)pos.x, (float)pos.y);
     DrawQuad(quad);
     DrawTiles();
 
@@ -113,7 +113,9 @@ void Play() {
   esat::WindowDestroy();
 }
 
-int esat::main(int, char**) {
+int esat::main(int argc, char** argv) {
+  argc = 0;
+  argv = nullptr;
   Play();  
   return 0;
 }
